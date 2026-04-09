@@ -1,7 +1,7 @@
 # OFI — Ordered Fractional Integration
 
 **Author:** Joseph Robert Escamilla
-**Status:** Complete — Foundational framework (100%)
+**Status:** Preprint — complete manuscript, not yet formally peer-reviewed
 **Patent:** US 11,954,561 B2 (Reissue Pending)
 **Repository:** https://github.com/JEsca1997/OFI
 
@@ -37,8 +37,8 @@ OFI provides a single operator-theoretic language that simultaneously:
 
 | File | Description |
 |---|---|
-| `OFI.pdf` | Main OFI paper (canonical referee-closed version) |
-| `OFI-MASTER-PAPER.pdf` | Master synthesis including all sector derivations |
+| `OFI.pdf` | Main OFI paper — complete preprint manuscript |
+| `OFI-MASTER-PAPER.pdf` | Master synthesis — complete preprint manuscript |
 
 ## Dependent Works
 
