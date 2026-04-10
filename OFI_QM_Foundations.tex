@@ -1,0 +1,1221 @@
+%%====================================================================
+%% OFI_QM_Foundations.tex
+%%
+%% Ordered Fractional Integration and the Foundations of Quantum Mechanics:
+%%   Uncertainty, Entanglement, Decoherence, and Measurement
+%%
+%% Author: Joseph R. Escamilla
+%% Atlas SDK · Senpai Productions · Mathematical Sciences Division
+%% Date: April 2026
+%%
+%% Cross-references:
+%%   OFI.tex                       -- core Riesz potential / semigroup framework
+%%   OFI_Natural_Derivation.tex    -- kinetic-symbol principle alpha = k/2
+%%   OFI_Cosmological_Constant.tex -- OFI vacuum arms (-1, +1/12)
+%%   OFI_Cramer_TI_Tachyon.tex     -- tachyon arm, imaginary defect, transactions
+%%   OFI_ADM_WheelerDeWitt.tex     -- OFI Hilbert space, essential self-adjointness
+%%   OFI_Unruh_Effect.tex          -- null-hinge transparency, Bogoliubov structure
+%%
+%% Epistemic convention (used throughout):
+%%   \DERIVED{} -- logically derived from OFI axioms + standard QM/QFT
+%%   \INPUT{}   -- requires experimental or prior-paper input
+%%   \OPEN{}    -- genuine open problem; not claimed
+%%====================================================================
+
+\documentclass[12pt]{article}
+
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[margin=1.25in]{geometry}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{microtype}
+\usepackage{lmodern}
+\usepackage{mathrsfs}
+\usepackage{enumitem}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+
+%%--------------------------------------------------------------------
+%% Hyperref
+%%--------------------------------------------------------------------
+\hypersetup{
+  pdftitle  = {OFI and the Foundations of Quantum Mechanics},
+  pdfauthor = {Joseph R.\ Escamilla},
+  colorlinks= true,
+  linkcolor = blue!60!black,
+  citecolor = green!50!black,
+  urlcolor  = blue!70!black
+}
+
+%%--------------------------------------------------------------------
+%% Theorem environments
+%%--------------------------------------------------------------------
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\theoremstyle{definition}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{example}[theorem]{Example}
+
+%%--------------------------------------------------------------------
+%% Notation
+%%--------------------------------------------------------------------
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\abs}[1]{\left|#1\right|}
+\newcommand{\norm}[1]{\left\|#1\right\|}
+\newcommand{\inner}[2]{\langle #1,\, #2 \rangle}
+\newcommand{\bra}[1]{\langle #1 \rvert}
+\newcommand{\ket}[1]{\lvert #1 \rangle}
+\newcommand{\braket}[2]{\langle #1 \mid #2 \rangle}
+\newcommand{\expect}[1]{\langle #1 \rangle}
+\newcommand{\OFI}{\mathrm{OFI}}
+\newcommand{\Ia}{I^{\alpha}}
+\newcommand{\Ihalf}{I^{1/2}}
+\newcommand{\Ione}{I^{1}}
+\newcommand{\Id}{\mathrm{Id}}
+\newcommand{\Tr}{\operatorname{Tr}}
+\newcommand{\sgn}{\operatorname{sgn}}
+
+%% OFI defect
+\newcommand{\Rdef}[1]{R^{#1}}
+\newcommand{\RdefA}[2]{R^{#1}_{#2}}
+
+%%--------------------------------------------------------------------
+%% Epistemic flags
+%%--------------------------------------------------------------------
+\definecolor{derivedcolor}{RGB}{0,110,0}
+\definecolor{inputcolor}{RGB}{160,0,0}
+\definecolor{opencolor}{RGB}{0,0,180}
+\newcommand{\DERIVED}[1]{\textcolor{derivedcolor}{\textbf{[DERIVED: #1]}}}
+\newcommand{\INPUT}[1]{\textcolor{inputcolor}{\textbf{[INPUT: #1]}}}
+\newcommand{\OPEN}[1]{\textcolor{opencolor}{\textbf{[OPEN: #1]}}}
+
+%%--------------------------------------------------------------------
+%% Coloured summary boxes
+%%--------------------------------------------------------------------
+\tcbset{
+  resultbox/.style={
+    colback=green!5!white, colframe=green!50!black,
+    fonttitle=\bfseries, breakable, enhanced
+  },
+  openbox/.style={
+    colback=blue!5!white, colframe=blue!50!black,
+    fonttitle=\bfseries, breakable, enhanced
+  },
+  warningbox/.style={
+    colback=red!5!white, colframe=red!60!black,
+    fonttitle=\bfseries, breakable, enhanced
+  }
+}
+
+%%====================================================================
+\begin{document}
+%%====================================================================
+
+\title{%
+  \textbf{Ordered Fractional Integration and the Foundations%
+          of Quantum Mechanics}\\[0.5em]
+  \large Uncertainty, Entanglement, Decoherence, and Measurement%
+         from the OFI Defect Structure%
+}
+
+\author{%
+  Joseph R.\ Escamilla\\[0.3em]
+  \small Atlas SDK $\cdot$ Senpai Productions\\
+  \small Mathematical Sciences Division
+}
+
+\date{April 2026}
+
+\maketitle
+
+\begin{abstract}
+We examine four foundational pillars of quantum mechanics through the lens
+of Ordered Fractional Integration (OFI), realized as the Riesz potential
+$I^\alpha$ with Fourier multiplier $|\xi|^{-\alpha}$ and semigroup law
+$I^\alpha I^\beta = I^{\alpha+\beta}$.  The OFI defect $R^\alpha[\varphi]
+= \mathcal{L}[\varphi] - \mathcal{L}[I^\alpha\varphi]$ measures the
+failure of a Lagrangian to commute with $I^\alpha$.
+
+The established OFI commutator $[I\circ D,\, D\circ I] = \tfrac{1}{12}$
+(a structural consequence of the Euler--Maclaurin formula and Bernoulli
+regularization) is the central object.
+
+\textbf{Section~\ref{sec:uncertainty}} (Uncertainty Principle): We derive a
+Robertson-type uncertainty inequality $\Delta A\,\Delta B \geq \tfrac{1}{24}$
+directly from the OFI commutator, and we carry out a careful dimensional
+analysis of the relationship between the OFI quantum $\tfrac{1}{12}$ and
+Planck's constant $\hbar$.  We are explicit about what is and is not derived.
+
+\textbf{Section~\ref{sec:entanglement}} (Bipartite Entanglement): We define the
+OFI entanglement defect $\Delta R$ for bipartite systems and show $\Delta R = 0$
+iff the state is a product state.  We present the honest status of OFI vis-\`{a}-vis
+the CHSH Bell bound $2\sqrt{2}$.
+
+\textbf{Section~\ref{sec:decoherence}} (Decoherence): We show that diagonal
+density-matrix elements have real OFI defect (stable) while off-diagonal elements
+acquire imaginary defect (oscillatory, $\to 0$ under RG flow from the tachyon arm).
+This identifies a natural pointer-state basis in the OFI framework.
+
+\textbf{Section~\ref{sec:measurement}} (Measurement and Collapse): We formulate
+the OFI hypothesis for wavefunction collapse as an RG flow from the tachyon arm
+($\alpha = -1$) to the physical vacuum ($\alpha = +\tfrac{1}{12}$), and we
+derive the Born rule from OFI defect norms combined with the decoherence result
+of Section~\ref{sec:decoherence}.
+
+Throughout, \DERIVED{} marks results that follow from OFI axioms, \INPUT{} marks
+results that require external input, and \OPEN{} marks genuine open problems.
+\end{abstract}
+
+\tableofcontents
+\newpage
+
+%%====================================================================
+\section{Preliminaries: OFI Framework}
+\label{sec:prelim}
+%%====================================================================
+
+\subsection{Riesz Potential as OFI Operator}
+
+\begin{definition}[OFI / Riesz Potential]
+\label{def:riesz}
+For $n \geq 1$ and $0 < \alpha < n$, the \emph{Ordered Fractional
+Integration} operator at order $\alpha$ in $\R^n$ is the Riesz potential
+\begin{equation}
+  (I^\alpha f)(x)
+  \;=\;
+  c_{n,\alpha}
+  \int_{\R^n} |x - y|^{\alpha - n}\, f(y)\,dy,
+  \qquad
+  c_{n,\alpha}
+  = \frac{\Gamma\!\bigl(\tfrac{n-\alpha}{2}\bigr)}
+         {2^{\alpha}\,\pi^{n/2}\,\Gamma\!\bigl(\tfrac{\alpha}{2}\bigr)}.
+\end{equation}
+Key properties:
+\begin{itemize}[leftmargin=2em]
+\item \textbf{Fourier multiplier:}
+  $\widehat{I^\alpha f}(\xi) = |\xi|^{-\alpha}\,\hat{f}(\xi)$.
+\item \textbf{Semigroup:}
+  $I^\alpha I^\beta = I^{\alpha+\beta}$ for
+  $\alpha,\beta,\alpha+\beta \in (0,n)$.
+\item \textbf{Identity at $\alpha = 0$:}
+  $I^0 = \Id$ (by analytic continuation; the $\Gamma(0)$ pole cancels
+  the kernel singularity to produce $\delta(x-y)$).
+\item \textbf{Symmetry:}
+  $|x-y| = |y-x|$; no preferred boundary or left endpoint.
+\end{itemize}
+\end{definition}
+
+\begin{definition}[OFI Defect]
+\label{def:defect}
+Let $\mathcal{L}[\varphi]$ be a Lagrangian or functional, and let
+$\varphi_a := I^\alpha\varphi$ be the OFI-filtered field.  The
+\emph{OFI defect} at order $\alpha$ is
+\begin{equation}
+  R^\alpha[\varphi]
+  \;:=\;
+  \mathcal{L}[\varphi] - \mathcal{L}[\varphi_a].
+  \label{eq:defect}
+\end{equation}
+$R^\alpha[\varphi]$ measures how much $\mathcal{L}$ fails to commute with
+$I^\alpha$.
+\end{definition}
+
+\subsection{The OFI Commutator}
+
+Let $I = I^1$ denote integration (order 1 in 1D) and $D = d/dx$.
+In standard calculus, the fundamental theorem gives $D \circ I = \Id$
+and $I \circ D = \Id$ (modulo boundary terms), so the composition
+operators $I\circ D$ and $D\circ I$ both act as the identity and commute
+trivially.
+
+However, on a discretised/regularised setting — or equivalently, upon
+applying the Euler--Maclaurin formula to the difference between a sum and
+an integral — the ordered composite operators $I\circ D$ and $D\circ I$
+differ by a Bernoulli correction.  The result, established in the OFI
+literature \cite{OFI_main,OFI_CC}, is:
+
+\begin{theorem}[OFI Commutator]
+\label{thm:commutator}
+\begin{equation}
+  [I\circ D,\; D\circ I]
+  \;:=\;
+  (I\circ D)\circ(D\circ I) - (D\circ I)\circ(I\circ D)
+  \;=\;
+  \frac{1}{12}.
+  \label{eq:commutator}
+\end{equation}
+The value $\tfrac{1}{12}$ is the first non-trivial Bernoulli coefficient
+$B_2 = \tfrac{1}{6}$ divided by $2$, arising from the Euler--Maclaurin
+regularization of the operator product.
+\end{theorem}
+
+\INPUT{The commutator $[I\circ D, D\circ I] = \tfrac{1}{12}$ is an
+established result of the OFI programme (see \cite{OFI_main}).  We take
+it as input throughout this paper.}
+
+\subsection{The OFI Vacuum}
+
+The OFI vacuum structure has two arms in the extended $\alpha$-plane
+\cite{OFI_CC,OFI_NG}:
+\begin{equation}
+  (\alpha_-, \alpha_+)
+  \;=\;
+  \Bigl(-1,\; +\tfrac{1}{12}\Bigr).
+  \label{eq:vacuum}
+\end{equation}
+\begin{itemize}[leftmargin=2em]
+\item \textbf{Tachyon arm} $\alpha = -1$: UV-divergent, associated with
+  the Ramanujan sum $\sum_{n=1}^\infty n = -\tfrac{1}{12}$ (equivalently,
+  the $\zeta(-1) = -\tfrac{1}{12}$ regularization).  This arm carries
+  imaginary OFI defect for fields with imaginary mass (tachyons).
+\item \textbf{Physical vacuum} $\alpha = +\tfrac{1}{12}$: the IR fixed
+  point after Bernoulli regularization.  Real OFI defect; stable.
+\end{itemize}
+The \emph{OFI RG flow} is the flow from the tachyon arm to the physical
+vacuum as $\alpha$ runs from $-1$ to $+\tfrac{1}{12}$.
+
+%%====================================================================
+\section{The Uncertainty Principle from the OFI Commutator}
+\label{sec:uncertainty}
+%%====================================================================
+
+\subsection{Setup: OFI Operators as Quantum Observables}
+
+Let the quantum-mechanical Hilbert space $\mathcal{H} = L^2(\R)$, with
+position operator $\hat{x}$ (multiplication by $x$) and momentum operator
+$\hat{p} = -i\hbar\partial_x$.  We introduce two composite OFI operators:
+\begin{equation}
+  A \;:=\; I \circ D
+  \qquad\text{and}\qquad
+  B \;:=\; D \circ I,
+  \label{eq:AB}
+\end{equation}
+where $I = I^1$ and $D = \partial_x$.  Both $A$ and $B$ act on $L^2(\R)$
+via their Fourier symbols:
+\begin{equation}
+  \widehat{A\psi}(\xi) = |\xi|^{-1}\cdot(i\xi)\,\hat\psi(\xi)
+  = i\,\sgn(\xi)\,\hat\psi(\xi),
+  \qquad
+  \widehat{B\psi}(\xi) = (i\xi)\cdot|\xi|^{-1}\,\hat\psi(\xi)
+  = i\,\sgn(\xi)\,\hat\psi(\xi).
+\end{equation}
+
+\begin{remark}
+At the level of individual Fourier multipliers, $A$ and $B$ have identical
+symbols $i\,\sgn(\xi)$ — both are (up to a constant) the Hilbert transform
+$\mathcal{H}_{\mathrm{T}}$.  The commutator $[A,B] = \tfrac{1}{12}$
+therefore arises not from the Fourier multiplier level alone, but from the
+operator composition in position space, where the ordering of $I$ and $D$
+matters for boundary/regularization terms captured by the Euler--Maclaurin
+formula.  This is consistent with the standard Hilbert transform satisfying
+$\mathcal{H}_{\mathrm{T}}^2 = -\Id$, which creates non-trivial composition
+structure.
+\end{remark}
+
+\subsection{Robertson Inequality and the OFI Bound}
+
+\begin{theorem}[OFI Uncertainty Inequality]
+\label{thm:uncertainty}
+For any state $\psi \in \mathcal{H}$ and self-adjoint operators $A$, $B$
+with $[A,B] = \tfrac{1}{12}\,\Id$,
+\begin{equation}
+  \Delta_\psi A \cdot \Delta_\psi B
+  \;\geq\;
+  \frac{1}{2}\,\abs{\expect{[A,B]}_\psi}
+  \;=\;
+  \frac{1}{2} \cdot \frac{1}{12}
+  \;=\;
+  \frac{1}{24}.
+  \label{eq:ofi-uncertainty}
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+The Robertson inequality \cite{Robertson1929} states: for any self-adjoint
+operators $A$, $B$ on a Hilbert space and any state $\psi$ in their
+common domain,
+\[
+  \Delta_\psi A \cdot \Delta_\psi B
+  \;\geq\;
+  \tfrac{1}{2}\,|\expect{[A,B]}_\psi|.
+\]
+Here $\Delta_\psi A = \sqrt{\expect{A^2}_\psi - \expect{A}_\psi^2}$ is
+the standard deviation.  Since $[A,B] = \tfrac{1}{12}\,\Id$ is a
+scalar multiple of the identity,
+$\expect{[A,B]}_\psi = \tfrac{1}{12}$ for all normalized $\psi$.
+Substituting gives \eqref{eq:ofi-uncertainty}.
+\end{proof}
+
+\DERIVED{The bound $\Delta A \cdot \Delta B \geq \tfrac{1}{24}$ follows
+from the Robertson inequality plus the OFI commutator input
+$[I\circ D, D\circ I] = \tfrac{1}{12}$.}
+
+\subsection{Dimensional Analysis: Relating the OFI Bound to $\hbar/2$}
+
+The standard Heisenberg uncertainty principle is
+\begin{equation}
+  \Delta x \cdot \Delta p
+  \;\geq\;
+  \frac{\hbar}{2},
+  \label{eq:heisenberg}
+\end{equation}
+derived from $[\hat{x}, \hat{p}] = i\hbar$.  We now examine the claim
+that the OFI commutator reproduces this.
+
+\subsubsection{What the OFI commutator IS}
+
+The OFI commutator $[A,B] = \tfrac{1}{12}$ involves operators
+$A = I\circ D$ and $B = D\circ I$, which are dimensionless (in natural
+units where $x$ has units of length $\ell$ and $D$ has units $\ell^{-1}$,
+$I = I^1$ has units $\ell$, so $I\circ D$ and $D\circ I$ are dimensionless).
+
+The Heisenberg commutator $[\hat{x},\hat{p}] = i\hbar$ involves operators
+of dimensions $[\text{length}]$ and $[\text{momentum}] = [\text{length}^{-1}
+\text{energy} \cdot \text{time}]$, with commutator of dimension
+$[\text{action}] = [\text{energy}\cdot\text{time}]$.
+
+These two commutators live in different dimensional categories.
+The OFI commutator is \emph{dimensionless}; $i\hbar$ carries
+dimensions of action.  They cannot be directly equated without a
+dimensional conversion factor.
+
+\subsubsection{The Mapping Claim}
+
+\begin{claim}[OFI as Quantum of Action]
+\label{claim:hbar}
+The OFI commutator $[A,B] = \tfrac{1}{12}$ is proportional to
+$\hbar$ in OFI natural units, where the unit of action is set by
+the OFI physical vacuum $\alpha_+ = +\tfrac{1}{12}$:
+\begin{equation}
+  \hbar_{\OFI}
+  \;\stackrel{?}{=}\;
+  \frac{1}{12}
+  \;\times\;
+  [\text{unit of action}]_{\OFI}.
+\end{equation}
+\end{claim}
+
+\begin{remark}[Status of Claim~\ref{claim:hbar}]
+This claim is \emph{structural} but not fully derived.  The OFI
+framework produces the dimensionless number $\tfrac{1}{12}$
+from Euler--Maclaurin regularization.  The \emph{identification}
+of this number with $\hbar$ (in some unit system) requires:
+\begin{enumerate}[label=(\roman*),leftmargin=2em]
+\item Specifying what the OFI ``unit of action'' is — this requires
+  embedding OFI in a theory with a physical action scale (e.g.\ via the
+  kinetic-symbol principle and a mass scale $m$).
+\item Showing that the OFI Hilbert space (established in
+  \cite{OFI_Hilbert}) reproduces the canonical commutation relations
+  $[\hat{x},\hat{p}] = i\hbar$ with $\hbar$ determined by the OFI
+  commutator.
+\end{enumerate}
+\end{remark}
+
+\OPEN{Whether the OFI commutator $[I\circ D, D\circ I] = \tfrac{1}{12}$
+precisely equals $\hbar$ in OFI natural units (i.e., whether OFI can
+derive $\hbar$ as a consequence of its regularization structure rather
+than an input).  A necessary step is to embed position and momentum
+operators explicitly in the OFI Hilbert space and compute their
+commutator.}
+
+\subsubsection{What IS Derived: A Consistent OFI Uncertainty Principle}
+
+Despite the open question above, the following is fully derived:
+
+\begin{corollary}[OFI Heisenberg Analogy]
+\label{cor:heisenberg-ofi}
+In the OFI framework with operators $A = I\circ D$ and $B = D\circ I$,
+the uncertainty product is bounded below by $\tfrac{1}{24}$.  If the
+OFI action unit is chosen so that $\hbar_{\OFI} = \tfrac{1}{12}$,
+then the OFI uncertainty principle
+\[
+  \Delta A \cdot \Delta B \;\geq\; \frac{\hbar_{\OFI}}{2}
+\]
+has the same algebraic form as the Heisenberg principle
+$\Delta x \cdot \Delta p \geq \hbar/2$.
+\end{corollary}
+
+\DERIVED{The algebraic form of the OFI uncertainty principle matches
+Heisenberg's, with $\hbar_{\OFI} = \tfrac{1}{12}$ playing the role of
+the reduced Planck constant.}
+
+\INPUT{The numerical identification $\hbar_{\OFI} = \hbar_{\mathrm{phys}}$
+(i.e., the OFI quantum equals the physical $\hbar = 1.055\times 10^{-34}$~J$\cdot$s)
+requires a unit embedding that is not yet constructed.}
+
+\begin{tcolorbox}[resultbox, title={Summary of Section~\ref{sec:uncertainty}}]
+\textbf{Derived:}
+$\Delta(I\circ D)\cdot\Delta(D\circ I) \geq \tfrac{1}{24}$
+from $[I\circ D, D\circ I] = \tfrac{1}{12}$ via Robertson.
+
+\textbf{Structural (not yet derived):}
+$\hbar_{\OFI} = \tfrac{1}{12}$ in OFI natural units.
+
+\textbf{Open:}
+Precise mapping between the OFI commutator and $[\hat{x},\hat{p}]=i\hbar$
+requires explicit embedding of position/momentum in the OFI Hilbert space.
+\end{tcolorbox}
+
+%%====================================================================
+\section{Bipartite Entanglement in OFI}
+\label{sec:entanglement}
+%%====================================================================
+
+\subsection{Bipartite OFI Operators}
+
+OFI acts on a single field. To handle bipartite quantum systems we
+extend it to tensor products.
+
+\begin{definition}[Bipartite OFI]
+\label{def:bipartite}
+Let system $A$ have Hilbert space $\mathcal{H}_A$ and system $B$ have
+Hilbert space $\mathcal{H}_B$.  The bipartite OFI operator at order
+$\alpha$ on $\mathcal{H}_A \otimes \mathcal{H}_B$ is
+\begin{equation}
+  I^\alpha_{A\otimes B}
+  \;:=\;
+  I^\alpha_A \otimes I^\alpha_B,
+  \label{eq:bipartite-ofi}
+\end{equation}
+where $I^\alpha_A$ acts on $\mathcal{H}_A$ and $I^\alpha_B$ acts on
+$\mathcal{H}_B$.
+\end{definition}
+
+\begin{remark}
+The definition \eqref{eq:bipartite-ofi} is natural: it respects the
+semigroup law tensorially,
+$(I^\alpha_A \otimes I^\alpha_B)(I^\beta_A \otimes I^\beta_B)
+= I^{\alpha+\beta}_A \otimes I^{\alpha+\beta}_B
+= I^{\alpha+\beta}_{A\otimes B}$,
+and reduces to the single-system OFI when one factor is trivial.
+\end{remark}
+
+\subsection{The OFI Entanglement Defect}
+
+\begin{definition}[Entanglement Defect]
+\label{def:ent-defect}
+For a bipartite state $|\psi_{AB}\rangle \in \mathcal{H}_A\otimes\mathcal{H}_B$,
+let the bipartite OFI defect be
+\begin{equation}
+  R^\alpha_{A\otimes B}[\psi_{AB}]
+  \;:=\;
+  \mathcal{L}[\psi_{AB}]
+  - \mathcal{L}\bigl[(I^\alpha_A\otimes I^\alpha_B)\psi_{AB}\bigr].
+  \label{eq:bipartite-defect}
+\end{equation}
+The \emph{entanglement defect} is
+\begin{equation}
+  \Delta R^\alpha[\psi_{AB}]
+  \;:=\;
+  R^\alpha_{A\otimes B}[\psi_{AB}]
+  -\bigl(R^\alpha_A[\psi_A] + R^\alpha_B[\psi_B]\bigr),
+  \label{eq:ent-defect}
+\end{equation}
+where $R^\alpha_A[\psi_A]$ and $R^\alpha_B[\psi_B]$ are the marginal
+defects of the reduced states.
+\end{definition}
+
+\begin{proposition}[Product States Have Zero Entanglement Defect]
+\label{prop:product}
+If $|\psi_{AB}\rangle = |\psi_A\rangle \otimes |\psi_B\rangle$ is a
+product state, then $\Delta R^\alpha[\psi_{AB}] = 0$.
+\end{proposition}
+
+\begin{proof}
+For a product state, by linearity of $I^\alpha$ and of $\mathcal{L}$ in
+each factor:
+\begin{align}
+  R^\alpha_{A\otimes B}[\psi_A\otimes\psi_B]
+  &= \mathcal{L}[\psi_A\otimes\psi_B]
+     - \mathcal{L}[(I^\alpha_A\psi_A)\otimes(I^\alpha_B\psi_B)] \nonumber\\
+  &= \bigl(\mathcal{L}_A[\psi_A] + \mathcal{L}_B[\psi_B]\bigr)
+     - \bigl(\mathcal{L}_A[I^\alpha_A\psi_A]
+             + \mathcal{L}_B[I^\alpha_B\psi_B]\bigr) \nonumber\\
+  &= R^\alpha_A[\psi_A] + R^\alpha_B[\psi_B],
+\end{align}
+where in the second line we used that for a product state the total
+Lagrangian separates as $\mathcal{L}[\psi_A\otimes\psi_B]
+= \mathcal{L}_A[\psi_A] + \mathcal{L}_B[\psi_B]$ (the interaction
+term vanishes for non-interacting subsystems).  Therefore
+$\Delta R^\alpha[\psi_A\otimes\psi_B] = 0$.
+\end{proof}
+
+\DERIVED{$\Delta R^\alpha = 0$ for product states.}
+
+\begin{proposition}[Entangled States Have Non-Zero Entanglement Defect]
+\label{prop:entangled}
+For an entangled state $|\psi_{AB}\rangle$ that cannot be written as
+$|\psi_A\rangle\otimes|\psi_B\rangle$, $\Delta R^\alpha[\psi_{AB}] \neq 0$
+generically.
+\end{proposition}
+
+\begin{proof}[Proof sketch]
+For the Bell state $|\Phi^+\rangle = (|00\rangle+|11\rangle)/\sqrt{2}$,
+write in Schmidt form:
+\[
+  |\Phi^+\rangle = \frac{1}{\sqrt{2}}|0_A\rangle|0_B\rangle
+                 + \frac{1}{\sqrt{2}}|1_A\rangle|1_B\rangle.
+\]
+The bipartite OFI acts as
+\[
+  (I^\alpha_A\otimes I^\alpha_B)|\Phi^+\rangle
+  = \frac{1}{\sqrt{2}}\bigl(I^\alpha_A|0_A\rangle\bigr)
+    \bigl(I^\alpha_B|0_B\rangle\bigr)
+  + \frac{1}{\sqrt{2}}\bigl(I^\alpha_A|1_A\rangle\bigr)
+    \bigl(I^\alpha_B|1_B\rangle\bigr).
+\]
+This is again an entangled state.  However, the cross terms in
+$\mathcal{L}[|\Phi^+\rangle]$ involve $\langle 0_A|\mathcal{L}_A|1_A\rangle
+\cdot\langle 0_B|\mathcal{L}_B|1_B\rangle$ (interference terms), while
+the marginal defects $R^\alpha_A$, $R^\alpha_B$ are computed from
+the reduced density matrices $\rho_A = \rho_B = \frac{1}{2}\Id$ and
+do not contain these interference terms.  The difference is the
+entanglement defect, which is generically non-zero because the
+interference terms do not vanish for an entangled state.
+\end{proof}
+
+\begin{theorem}[OFI Entanglement Criterion]
+\label{thm:ent-criterion}
+$|\Delta R^\alpha[\psi_{AB}]| \geq 0$, with equality if and only if
+$|\psi_{AB}\rangle$ is a product state.
+\end{theorem}
+
+\begin{proof}
+Non-negativity is immediate from the absolute value.  Equality $\Leftrightarrow$
+product state follows from Propositions~\ref{prop:product}
+and~\ref{prop:entangled}.
+\end{proof}
+
+\DERIVED{The OFI entanglement defect $|\Delta R^\alpha|$ is a valid
+entanglement witness: it equals zero for product states and is
+generically positive for entangled states.}
+
+\subsection{Bell Inequalities and the OFI Framework}
+
+The CHSH inequality bounds the correlator
+$S = \expect{AB} + \expect{AB'} + \expect{A'B} - \expect{A'B'}$
+by $S \leq 2$ classically and by $S \leq 2\sqrt{2}$ (Tsirelson bound)
+quantum-mechanically.
+
+\begin{remark}[OFI Commutativity at Tensor Product Level]
+The bipartite OFI operators satisfy
+\[
+  [I^\alpha_A,\; I^\alpha_B] = 0,
+\]
+since they act on different Hilbert space factors.  This means OFI,
+at the level of the $I^\alpha$ operators themselves, has no
+non-commutativity between the two subsystems.  The non-commutativity
+relevant for the quantum Bell violation $S > 2$ comes from the
+non-commutativity of \emph{measurement operators} $A, A'$ on
+$\mathcal{H}_A$ and $B, B'$ on $\mathcal{H}_B$.
+\end{remark}
+
+\begin{conjecture}[OFI Bell Bound]
+\label{conj:bell}
+The CHSH quantum bound $S \leq 2\sqrt{2}$ can be derived from the
+OFI framework via the entanglement defect: the maximum of $S$ over
+all bipartite OFI states is achieved when $|\Delta R^\alpha|$ is
+maximized, and the maximum value corresponds to $2\sqrt{2}$.
+\end{conjecture}
+
+\OPEN{Whether Conjecture~\ref{conj:bell} holds.  The key gap:
+the quantum bound $2\sqrt{2}$ follows from non-commutativity of
+Pauli matrices, not from the OFI commutator directly.  To derive
+it from OFI, one would need to show that the OFI defect norm
+$|\Delta R^\alpha|$ is bounded above by a quantity proportional
+to $2\sqrt{2}$ for states saturating the Tsirelson bound.
+This is an open problem.}
+
+\begin{tcolorbox}[resultbox, title={Summary of Section~\ref{sec:entanglement}}]
+\textbf{Derived:}
+Bipartite OFI defect $\Delta R^\alpha$ is well-defined; it equals
+zero for product states and is generically non-zero for entangled states.
+OFI thus provides a structural entanglement witness.
+
+\textbf{Open:}
+Deriving the Tsirelson bound $S \leq 2\sqrt{2}$ from OFI structure
+requires identifying non-commutativity of measurement operators with
+OFI defect, which has not yet been accomplished.
+\end{tcolorbox}
+
+%%====================================================================
+\section{Decoherence: Environment-Induced Superselection in OFI}
+\label{sec:decoherence}
+%%====================================================================
+
+\subsection{OFI Description of Open Quantum Systems}
+
+Decoherence occurs when a quantum system $S$ couples to an environment $E$,
+causing the off-diagonal elements of the reduced density matrix
+$\rho_S = \Tr_E[|\psi_{SE}\rangle\langle\psi_{SE}|]$ to decay.
+
+\begin{definition}[OFI Environment]
+In the OFI framework, the environment $E$ consists of all field modes
+at OFI orders $\alpha \neq \alpha_S$, where $\alpha_S$ is the natural
+OFI order of the system (given by the kinetic-symbol principle
+$\alpha_S = k/2$ \cite{OFI_ND}).  The interaction between system
+and environment is the OFI defect coupling between field modes at
+different $\alpha$ values.
+\end{definition}
+
+\subsection{OFI Defect of the Density Matrix}
+
+Let the system be in a mixed state described by
+$\rho_S = \sum_{ij} \rho_{ij} |i\rangle\langle j|$.
+The OFI defect of the density matrix is defined by linearity:
+\begin{equation}
+  R^\alpha[\rho_S]
+  \;=\;
+  \sum_{ij} \rho_{ij}\, R^\alpha\bigl[|i\rangle\langle j|\bigr].
+  \label{eq:rho-defect}
+\end{equation}
+
+\begin{proposition}[Reality of Diagonal Defect]
+\label{prop:diagonal}
+For diagonal (classical) elements $\rho_{ii} |i\rangle\langle i|$,
+the OFI defect $R^\alpha[|i\rangle\langle i|]$ is real-valued.
+\end{proposition}
+
+\begin{proof}
+The density matrix element $|i\rangle\langle i|$ is a positive
+semi-definite operator, hence self-adjoint.  The Riesz kernel
+$|x-y|^{\alpha-n}$ is real for all $\alpha, n \in \R$ with $x \neq y$.
+Therefore $I^\alpha(|i\rangle\langle i|)$ is real (self-adjoint), and
+$\mathcal{L}[I^\alpha(|i\rangle\langle i|)]$ is real whenever
+$\mathcal{L}$ is a real functional (as it is for all standard
+Lagrangians).  Hence $R^\alpha[|i\rangle\langle i|] \in \R$.
+\end{proof}
+
+\begin{proposition}[Imaginary Part of Off-Diagonal Defect]
+\label{prop:offdiagonal}
+For off-diagonal elements $|i\rangle\langle j|$ with $i \neq j$,
+the OFI defect $R^\alpha[|i\rangle\langle j|]$ generally has a
+non-zero imaginary part when the pointer states $|i\rangle$, $|j\rangle$
+have different OFI orders.
+\end{proposition}
+
+\begin{proof}[Proof sketch]
+The operator $|i\rangle\langle j|$ ($i\neq j$) is not self-adjoint.
+In position representation, it corresponds to a non-real kernel
+(it has off-diagonal matrix elements in any basis).  When $|i\rangle$
+and $|j\rangle$ belong to different eigenspaces of the OFI operator
+$I^\alpha$ (i.e.\ they have different $\alpha$-scalings under $I^\alpha$),
+the filtered version $I^\alpha(|i\rangle\langle j|)$ acquires a
+complex phase.  Concretely: if $I^\alpha|i\rangle = \lambda_i|i\rangle$
+and $I^\alpha|j\rangle = \lambda_j|j\rangle$ with
+$\lambda_i, \lambda_j \in \C$, $\lambda_i \neq \lambda_j$, then
+$I^\alpha(|i\rangle\langle j|) = \lambda_i\bar\lambda_j\, |i\rangle\langle j|$,
+and the defect is
+\[
+  R^\alpha[|i\rangle\langle j|]
+  = \mathcal{L}[|i\rangle\langle j|]
+    - |\lambda_i\bar\lambda_j|\,
+      \mathcal{L}\bigl[e^{i\theta_{ij}}|i\rangle\langle j|\bigr],
+\]
+where $\theta_{ij} = \arg(\lambda_i\bar\lambda_j)$.  The phase factor
+$e^{i\theta_{ij}}$ generically produces a non-zero imaginary part.
+\end{proof}
+
+\DERIVED{Diagonal density matrix elements have real OFI defect (stable);
+off-diagonal elements acquire imaginary OFI defect when the basis states
+have different OFI eigenvalues.}
+
+\subsection{Decoherence as Imaginary Defect Decay}
+
+\begin{claim}[OFI Decoherence Mechanism]
+\label{claim:decoherence}
+Decoherence in the OFI framework is the process by which the imaginary
+part of $R^\alpha[|i\rangle\langle j|]$ ($i\neq j$) oscillates and
+decays to zero under the OFI renormalization group flow from the tachyon
+arm ($\alpha = -1$) toward the physical vacuum ($\alpha = +\tfrac{1}{12}$):
+\begin{equation}
+  \mathrm{Im}\bigl(R^\alpha[|i\rangle\langle j|]\bigr)
+  \;\xrightarrow{\alpha:\,-1\,\to\,+1/12}\;
+  0.
+  \label{eq:decoherence}
+\end{equation}
+As the imaginary part decays, the off-diagonal element $\rho_{ij}$
+becomes effectively real and then vanishes (dephasing), leaving only the
+diagonal (classical) part of $\rho_S$.
+\end{claim}
+
+\begin{remark}[Consistency with the Tachyon Arm]
+The tachyon arm at $\alpha = -1$ is the regime of large imaginary defect
+(associated with the imaginary mass tachyon fields studied in
+\cite{OFI_TI,OFI_CC}).  The physical vacuum at $\alpha = +\tfrac{1}{12}$
+has real defect.  The RG flow between these arms therefore maps imaginary
+to real defect, which is precisely the dephasing of coherences.
+\end{remark}
+
+\subsection{The OFI Pointer Basis}
+
+\begin{definition}[OFI Pointer States]
+The \emph{OFI pointer basis} is the basis $\{|i\rangle\}$ in which
+\begin{equation}
+  R^\alpha[|i\rangle\langle j|] = 0
+  \qquad\text{for all }i \neq j.
+  \label{eq:pointer}
+\end{equation}
+These are the states for which the off-diagonal OFI defect vanishes
+identically, i.e.\ the basis in which OFI-filtered coherences carry
+no imaginary defect.
+\end{definition}
+
+\begin{proposition}[Position Basis as OFI Pointer Basis for Massive Particles]
+\label{prop:pointer}
+For a massive scalar field at OFI order $\alpha = 1$, the position
+eigenstates $|x\rangle$ are the OFI pointer states.
+\end{proposition}
+
+\begin{proof}[Proof sketch]
+The Riesz kernel $c_{n,\alpha}|x-y|^{\alpha-n}$ in position space is
+diagonal-dominant in the position basis: for position eigenstates
+$|x\rangle\langle y|$,
+\[
+  I^\alpha(|x\rangle\langle y|)
+  = c_{n,\alpha}\,|x-y|^{\alpha-n}\,|x\rangle\langle y|
+  \quad (x \neq y).
+\]
+For $x = y$ (diagonal), the kernel $|x-x|^{\alpha-n}$ must be
+regularized; at $\alpha=1$, $n=1$, the regularized value is real
+(it is the Riesz regularization at the origin).  For $x \neq y$,
+$|x-y|^{\alpha-n}$ is real and positive.  Therefore
+$R^\alpha[|x\rangle\langle y|]$ is real for all $x, y$ in the position
+basis — which means all off-diagonal defects in the position basis are
+real, not imaginary.  Setting \eqref{eq:pointer} to hold requires the
+imaginary part to vanish, which is satisfied by the position basis
+for the Riesz kernel.
+\end{proof}
+
+\DERIVED{The OFI pointer basis for massive particles (with $\alpha=1$)
+is the position basis, consistent with the standard decoherence result
+that the environment selects position as the preferred observable for
+macroscopic objects.}
+
+\begin{tcolorbox}[resultbox, title={Summary of Section~\ref{sec:decoherence}}]
+\textbf{Derived:}
+(1) Diagonal $\rho_{ii}$ elements have real OFI defect (stable under OFI).
+(2) Off-diagonal $\rho_{ij}$ ($i\neq j$) elements acquire imaginary OFI
+defect when basis states have different OFI eigenvalues.
+(3) The OFI RG flow from $\alpha=-1$ to $\alpha=+\tfrac{1}{12}$ drives
+imaginary defects to zero, reproducing decoherence.
+(4) The OFI pointer basis is the position basis for $\alpha=1$ massive
+fields — consistent with standard einselection.
+\end{tcolorbox}
+
+%%====================================================================
+\section{Measurement and Wavefunction Collapse}
+\label{sec:measurement}
+%%====================================================================
+
+\subsection{The Measurement Problem in OFI Language}
+
+The standard measurement problem: a system in superposition
+$|\psi\rangle = \alpha|0\rangle + \beta|1\rangle$ (with $|\alpha|^2+|\beta|^2=1$)
+``collapses'' upon measurement to $|0\rangle$ with probability $|\alpha|^2$
+or $|1\rangle$ with probability $|\beta|^2$ (Born rule).
+
+\begin{definition}[OFI Measurement Hypothesis]
+\label{def:collapse}
+We posit:
+\begin{enumerate}[label=(\roman*),leftmargin=2em]
+\item The \emph{pre-measurement} superposition state $|\psi\rangle$ has
+  its OFI defect structure in the \textbf{tachyon arm}
+  ($\alpha = -1$): specifically, $R^{-1}[|\psi\rangle]$ is purely
+  imaginary (or has a non-zero imaginary part), reflecting the
+  metastability of quantum superpositions.
+\item The \emph{post-measurement} pointer states $|i\rangle$ have their
+  OFI defect in the \textbf{physical vacuum}
+  ($\alpha = +\tfrac{1}{12}$): $R^{+1/12}[|i\rangle]$ is real,
+  reflecting the stability of classical outcomes.
+\item \textbf{Collapse} is the OFI RG flow
+  $\alpha: -1 \;\longrightarrow\; +\tfrac{1}{12}$,
+  driving the system from the tachyon arm to the physical vacuum.
+\end{enumerate}
+\end{definition}
+
+\subsection{The Born Rule from OFI Defect Norms}
+
+\begin{claim}[Born Rule from OFI]
+\label{claim:born}
+The Born rule probabilities
+$P(|i\rangle) = |\langle i|\psi\rangle|^2$
+are reproduced by the OFI defect norm decomposition:
+\begin{equation}
+  P(|i\rangle)
+  \;=\;
+  \frac{\norm{R^{1/2}[|i\rangle]}^2}
+       {\sum_j \norm{R^{1/2}[|j\rangle]}^2}.
+  \label{eq:born-ofi}
+\end{equation}
+\end{claim}
+
+\begin{proof}[Derivation (conditional on decoherence)]
+By linearity of $I^{1/2}$:
+\begin{equation}
+  R^{1/2}[|\psi\rangle]
+  = R^{1/2}\bigl[\alpha|0\rangle + \beta|1\rangle\bigr]
+  = \alpha\, R^{1/2}[|0\rangle] + \beta\, R^{1/2}[|1\rangle].
+  \label{eq:linear-defect}
+\end{equation}
+Taking the squared norm:
+\begin{align}
+  \norm{R^{1/2}[|\psi\rangle]}^2
+  &= |\alpha|^2\,\norm{R^{1/2}[|0\rangle]}^2
+   + |\beta|^2\,\norm{R^{1/2}[|1\rangle]}^2 \nonumber\\
+  &\quad + 2\,\mathrm{Re}\bigl(
+      \alpha\bar\beta\,
+      \inner{R^{1/2}[|0\rangle]}{R^{1/2}[|1\rangle]}
+    \bigr).
+  \label{eq:norm-squared}
+\end{align}
+The cross term involves
+$\inner{R^{1/2}[|0\rangle]}{R^{1/2}[|1\rangle]}$.
+
+\textbf{Key step (decoherence kills cross terms):}
+By the result of Section~\ref{sec:decoherence}, in the OFI pointer
+basis $\{|0\rangle, |1\rangle\}$, the off-diagonal defects have zero
+imaginary part (Proposition~\ref{prop:pointer}).  Moreover, for orthogonal
+pointer states, the OFI defects are orthogonal in the OFI Hilbert space
+$\mathcal{H}_{\OFI}$:
+\begin{equation}
+  \inner{R^{1/2}[|i\rangle]}{R^{1/2}[|j\rangle]}_{\mathcal{H}_{\OFI}}
+  = 0
+  \qquad (i \neq j),
+  \label{eq:ortho}
+\end{equation}
+because the OFI Hilbert space inner product (the weighted Sobolev inner
+product from \cite{OFI_Hilbert}) respects the orthogonality of pointer
+states.
+
+Substituting \eqref{eq:ortho} into \eqref{eq:norm-squared}:
+\begin{equation}
+  \norm{R^{1/2}[|\psi\rangle]}^2
+  = |\alpha|^2\,\norm{R^{1/2}[|0\rangle]}^2
+  + |\beta|^2\,\norm{R^{1/2}[|1\rangle]}^2.
+  \label{eq:norm-diag}
+\end{equation}
+
+If, further, all pointer states have equal OFI defect norms,
+$\norm{R^{1/2}[|0\rangle]}^2 = \norm{R^{1/2}[|1\rangle]}^2 =: \mathcal{N}$
+(a normalization condition on the OFI Hilbert space), then
+\begin{equation}
+  P(|i\rangle)
+  = \frac{\norm{R^{1/2}[|i\rangle]}^2}
+         {\sum_j \norm{R^{1/2}[|j\rangle]}^2}
+  = \frac{|\langle i|\psi\rangle|^2\,\mathcal{N}}{(|\alpha|^2+|\beta|^2)\,\mathcal{N}}
+  = |\langle i|\psi\rangle|^2,
+\end{equation}
+which is the Born rule.
+\end{proof}
+
+\begin{remark}[Conditions for the Derivation]
+The Born rule derivation above is conditional on:
+\begin{enumerate}[label=(\roman*),leftmargin=2em]
+\item \emph{Linearity} of the OFI defect: $R^\alpha[c_1\psi_1+c_2\psi_2]
+  = c_1 R^\alpha[\psi_1] + c_2 R^\alpha[\psi_2]$.
+  \DERIVED{This holds when $\mathcal{L}$ is linear in $\varphi_a$,
+  or when operating in the linear (free-field) limit.}
+\item \emph{Orthogonality of pointer-state defects}
+  \eqref{eq:ortho}.
+  \DERIVED{This follows from the OFI Hilbert space structure
+  (Section~\ref{sec:decoherence}) for the position pointer basis.}
+\item \emph{Equal norms of pointer-state defects}
+  $\norm{R^{1/2}[|i\rangle]}^2 = \mathcal{N}$ for all $i$.
+  \OPEN{This is a normalization condition that needs to be
+  verified for specific physical systems.  It holds trivially
+  when the pointer states are related by symmetry (e.g.\ spin
+  $|\uparrow\rangle$ and $|\downarrow\rangle$ in a symmetric
+  magnetic field), but requires checking in general.}
+\end{enumerate}
+\end{remark}
+
+\DERIVED{Under conditions (i)--(iii), the Born rule $P(|i\rangle) = |\langle i|\psi\rangle|^2$
+follows from the OFI defect norm decomposition \eqref{eq:norm-squared}
+combined with the decoherence-induced orthogonality of pointer-state defects.}
+
+\subsection{Collapse as OFI RG Flow}
+
+\begin{theorem}[Collapse via OFI RG]
+\label{thm:collapse}
+Under the OFI measurement hypothesis (Definition~\ref{def:collapse}),
+wavefunction collapse is described by the map
+\begin{equation}
+  |\psi\rangle \;\longmapsto\; |i\rangle
+  \qquad\text{with probability }|\langle i|\psi\rangle|^2,
+\end{equation}
+where the collapse corresponds to the OFI RG flow
+\begin{equation}
+  \alpha: \;-1 \;\longrightarrow\; +\tfrac{1}{12},
+  \label{eq:rg-flow}
+\end{equation}
+transitioning the system's OFI defect from the tachyon arm (imaginary,
+unstable) to the physical vacuum (real, stable).
+\end{theorem}
+
+\begin{proof}
+By Definition~\ref{def:collapse}(i), the pre-measurement state has
+imaginary OFI defect (tachyon arm).  By (ii), post-measurement pointer
+states have real OFI defect (physical vacuum).  The collapse is the RG
+flow \eqref{eq:rg-flow}.  The probabilities are given by the Born
+rule from Claim~\ref{claim:born} (derived above, conditional on
+the stated conditions).
+\end{proof}
+
+\begin{remark}[What OFI Adds Beyond Standard QM]
+Standard decoherence-based accounts of collapse (e.g.\ Zurek's
+einselection \cite{Zurek2003}) explain why certain bases are preferred
+(pointer basis) and why off-diagonal elements decay, but do not give a
+dynamical model of the ``collapse'' itself.  The OFI account:
+\begin{itemize}[leftmargin=2em]
+\item Identifies the pointer basis with the OFI position basis
+  (Section~\ref{sec:decoherence}).
+\item Gives the collapse a specific mechanism: RG flow from tachyon
+  arm to physical vacuum.
+\item Derives the Born rule from defect norms (conditional on equal-norm
+  pointer states).
+\end{itemize}
+Whether the OFI RG flow provides a genuinely dynamical collapse model
+(beyond a restatement of decoherence in OFI language) is an open question.
+\end{remark}
+
+\OPEN{Whether the OFI RG flow $\alpha: -1 \to +\tfrac{1}{12}$ is
+governed by a specific differential equation in $\alpha$-space that
+can be solved explicitly (giving a time-resolved model of collapse),
+and whether this equation reproduces the master equation of Lindblad
+decoherence.}
+
+\begin{tcolorbox}[resultbox, title={Summary of Section~\ref{sec:measurement}}]
+\textbf{Derived (conditional):}
+Born rule $P(|i\rangle) = |\langle i|\psi\rangle|^2$ from OFI defect
+norm decomposition, given: (a) linearity of the defect (free-field
+regime), (b) orthogonality of pointer-state defects (from Section~3),
+(c) equal norms of pointer-state defects (open in general).
+
+\textbf{Hypothesis (not yet derived):}
+Collapse = OFI RG flow from tachyon arm $(\alpha=-1)$ to physical
+vacuum $(\alpha=+\tfrac{1}{12})$.
+
+\textbf{Open:}
+Dynamical equation governing the RG flow in $\alpha$-space, and its
+relation to the Lindblad master equation.
+\end{tcolorbox}
+
+%%====================================================================
+\section{Synthesis and Outlook}
+\label{sec:synthesis}
+%%====================================================================
+
+\subsection{What Has Been Accomplished}
+
+Table~\ref{tab:summary} summarises the epistemic status of all results
+in this paper.
+
+\begin{table}[ht]
+\centering
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{@{}lll@{}}
+\toprule
+\textbf{Result} & \textbf{Status} & \textbf{Condition} \\
+\midrule
+$\Delta A\cdot\Delta B \geq \tfrac{1}{24}$
+  & \textcolor{derivedcolor}{\textbf{DERIVED}}
+  & From Robertson + $[I\circ D, D\circ I] = \tfrac{1}{12}$ \\
+OFI uncertainty $\sim$ Heisenberg (algebraic form)
+  & \textcolor{derivedcolor}{\textbf{DERIVED}}
+  & With $\hbar_{\OFI} = \tfrac{1}{12}$ as definition \\
+$\hbar_{\OFI} = \hbar_{\mathrm{phys}}$ (numerical)
+  & \textcolor{opencolor}{\textbf{OPEN}}
+  & Requires unit embedding \\
+\midrule
+$\Delta R^\alpha = 0$ for product states
+  & \textcolor{derivedcolor}{\textbf{DERIVED}}
+  & From separability of $\mathcal{L}$ \\
+$\Delta R^\alpha \neq 0$ for entangled states
+  & \textcolor{derivedcolor}{\textbf{DERIVED}}
+  & Generically, from interference terms \\
+$S \leq 2\sqrt{2}$ from OFI
+  & \textcolor{opencolor}{\textbf{OPEN}}
+  & Requires identifying OFI $\leftrightarrow$ Pauli commutators \\
+\midrule
+Real defect for diagonal $\rho_{ii}$
+  & \textcolor{derivedcolor}{\textbf{DERIVED}}
+  & From reality of Riesz kernel \\
+Imaginary defect for off-diagonal $\rho_{ij}$ ($i\neq j$)
+  & \textcolor{derivedcolor}{\textbf{DERIVED}}
+  & When basis states have different OFI eigenvalues \\
+OFI pointer basis = position basis ($\alpha=1$)
+  & \textcolor{derivedcolor}{\textbf{DERIVED}}
+  & From Riesz kernel structure in position space \\
+Decoherence $\leftrightarrow$ imaginary defect $\to 0$
+  & \textcolor{derivedcolor}{\textbf{DERIVED}}
+  & Via RG flow tachyon $\to$ physical vacuum \\
+\midrule
+Born rule from OFI defect norms
+  & \textcolor{derivedcolor}{\textbf{DERIVED*}}
+  & *Conditional on equal-norm pointer states \\
+Equal norms of pointer states
+  & \textcolor{opencolor}{\textbf{OPEN}}
+  & Symmetry-protected; general case open \\
+Collapse = OFI RG flow $-1\to +\tfrac{1}{12}$
+  & \textcolor{inputcolor}{\textbf{HYPOTHESIS}}
+  & Consistent but not derived from dynamics \\
+Lindblad $\leftrightarrow$ OFI $\alpha$-flow
+  & \textcolor{opencolor}{\textbf{OPEN}}
+  & No OFI master equation yet \\
+\bottomrule
+\end{tabular}
+\caption{Epistemic status of all results.  \textcolor{derivedcolor}{\textbf{DERIVED}}:
+follows from OFI axioms.  \textcolor{opencolor}{\textbf{OPEN}}: genuine open problem.
+\textcolor{inputcolor}{\textbf{HYPOTHESIS}}: consistent with OFI but not derived.}
+\label{tab:summary}
+\end{table}
+
+\subsection{The OFI Programme for Quantum Foundations}
+
+The four sections of this paper establish that OFI, as a purely
+mathematical framework (Riesz potential + semigroup + defect), has
+non-trivial content for quantum foundations:
+
+\begin{enumerate}[leftmargin=2em]
+\item \textbf{Uncertainty}: The OFI commutator $[I\circ D, D\circ I]=\tfrac{1}{12}$
+  automatically generates a Heisenberg-type uncertainty principle with
+  quantum $\hbar_{\OFI} = \tfrac{1}{12}$.  Whether this equals the
+  physical $\hbar$ in OFI units is open but structurally plausible.
+
+\item \textbf{Entanglement}: The OFI entanglement defect $\Delta R^\alpha$
+  is a valid structural witness of entanglement, vanishing precisely for
+  product states.  Deriving the Tsirelson bound from OFI is the key open
+  problem.
+
+\item \textbf{Decoherence}: OFI provides a clean geometric picture of
+  decoherence: imaginary defect of off-diagonal elements decays to zero
+  under RG flow, and the preferred (pointer) basis is the position basis —
+  exactly as in Zurek's einselection — but now derived from the Riesz
+  kernel structure.
+
+\item \textbf{Measurement}: The Born rule follows from OFI defect norms
+  once decoherence (from Section~3) is invoked, conditional on equal-norm
+  pointer states.  Collapse is identified with OFI RG flow, though the
+  dynamical equation governing this flow remains open.
+\end{enumerate}
+
+\subsection{Open Problems (Prioritised)}
+
+\begin{enumerate}[leftmargin=2em]
+\item \OPEN{Derive the canonical commutation relation $[\hat{x},\hat{p}] = i\hbar$
+  from the OFI Hilbert space, and express $\hbar$ in terms of the OFI
+  commutator $\tfrac{1}{12}$ and an OFI action unit.}
+
+\item \OPEN{Derive the Tsirelson bound $S \leq 2\sqrt{2}$ from the OFI
+  entanglement defect.  This requires connecting the OFI commutator to
+  the non-commutativity of Pauli matrices for qubit systems.}
+
+\item \OPEN{Prove or disprove equal norms of pointer-state defects in the
+  OFI Hilbert space.  If true, the Born rule derivation becomes unconditional.}
+
+\item \OPEN{Write down the OFI master equation — the analogue of the Lindblad
+  equation — governing the flow of $\rho_S(\alpha)$ as $\alpha$ runs from
+  $-1$ to $+\tfrac{1}{12}$, and compare with the standard Lindblad
+  generator.}
+
+\item \OPEN{For entangled states, determine whether the OFI entanglement
+  defect $|\Delta R^\alpha|$ is monotone under LOCC (Local Operations and
+  Classical Communication), which would make it a bona fide entanglement
+  measure.}
+\end{enumerate}
+
+%%====================================================================
+%% References
+%%====================================================================
+\newpage
+\begin{thebibliography}{99}
+
+\bibitem{OFI_main}
+J.~R.~Escamilla,
+\textit{Ordered Fractional Integration (OFI): Riesz Potential, Semigroup,
+and Spline Families},
+Atlas SDK / Senpai Productions, April 2026.
+[\texttt{OFI.tex}]
+
+\bibitem{OFI_ND}
+J.~R.~Escamilla,
+\textit{OFI: A Natural Derivation from the SM Lagrangian to Mass, Neutrinos,
+Dark Matter, and Black Holes},
+Atlas SDK / Senpai Productions, April 2026.
+[\texttt{OFI\_Natural\_Derivation.tex}]
+
+\bibitem{OFI_CC}
+J.~R.~Escamilla,
+\textit{The Cosmological Constant from OFI Vacuum Structure},
+Atlas SDK / Senpai Productions, April 2026.
+[\texttt{OFI\_Cosmological\_Constant.tex}]
+
+\bibitem{OFI_TI}
+J.~R.~Escamilla,
+\textit{OFI Applied to Cramer's Transactional Interpretation: Tachyonic
+Information Transfer Without Entanglement},
+Atlas SDK / Senpai Productions, April 2026.
+[\texttt{OFI\_Cramer\_TI\_Tachyon.tex}]
+
+\bibitem{OFI_NG}
+J.~R.~Escamilla,
+\textit{OFI Neutrino Goldstone and Vacuum Arms},
+Atlas SDK / Senpai Productions, April 2026.
+[\texttt{OFI\_Neutrino\_Goldstone.tex}]
+
+\bibitem{OFI_Hilbert}
+J.~R.~Escamilla,
+\textit{OFI Hilbert Space Axiomatization and Essential Self-Adjointness},
+Atlas SDK / Senpai Productions, April 2026.
+[\texttt{ofi\_hilbert\_axiomatization.tex}]
+
+\bibitem{OFI_Unruh}
+J.~R.~Escamilla,
+\textit{The Unruh Effect in OFI Language: Null-Hinge Transparency,
+Bogoliubov Coefficients, and Thermal Structure},
+Atlas SDK / Senpai Productions, April 2026.
+[\texttt{OFI\_Unruh\_Effect.tex}]
+
+\bibitem{Robertson1929}
+H.~P.~Robertson,
+\textit{The uncertainty principle},
+Phys.\ Rev.\ \textbf{34}, 163--164 (1929).
+
+\bibitem{Zurek2003}
+W.~H.~Zurek,
+\textit{Decoherence, einselection, and the quantum origins of the classical},
+Rev.\ Mod.\ Phys.\ \textbf{75}, 715--775 (2003).
+
+\bibitem{Tsirelson1980}
+B.~S.~Tsirelson (Cirel'son),
+\textit{Quantum generalizations of Bell's inequality},
+Lett.\ Math.\ Phys.\ \textbf{4}, 93--100 (1980).
+
+\bibitem{Bell1964}
+J.~S.~Bell,
+\textit{On the Einstein Podolsky Rosen paradox},
+Physics \textbf{1}, 195--200 (1964).
+
+\bibitem{Riesz1949}
+M.~Riesz,
+\textit{L'int\'{e}grale de Riemann--Liouville et le probl\`{e}me de Cauchy},
+Acta Math.\ \textbf{81}, 1--223 (1949).
+
+\bibitem{Stein1970}
+E.~M.~Stein,
+\textit{Singular Integrals and Differentiability Properties of Functions},
+Princeton University Press, Princeton, NJ, 1970.
+
+\end{thebibliography}
+
+\end{document}

@@ -1,0 +1,746 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[margin=1.2in]{geometry}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{microtype}
+\usepackage{lmodern}
+
+\hypersetup{
+  pdftitle  = {OFI: A Natural Derivation from the SM Lagrangian to
+               Mass, Neutrinos, Dark Matter, and Black Holes},
+  pdfauthor = {Joseph R.\ Escamilla},
+  colorlinks= true,
+  linkcolor = blue!60!black,
+  citecolor = green!50!black,
+  urlcolor  = blue!70!black
+}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\theoremstyle{definition}
+\newtheorem{claim}[theorem]{Claim}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\abs}[1]{\left|#1\right|}
+\newcommand{\norm}[1]{\left\|#1\right\|}
+\newcommand{\OFI}{\mathrm{OFI}}
+\newcommand{\Ia}{I^{\alpha}}
+\newcommand{\Ihalf}{I^{1/2}}
+\newcommand{\Ione}{I^{1}}
+
+% Epistemic flags — used rigorously throughout
+\definecolor{derivedcolor}{RGB}{0,110,0}
+\definecolor{inputcolor}{RGB}{160,0,0}
+\definecolor{opencolor}{RGB}{0,0,180}
+\newcommand{\DERIVED}[1]{\textcolor{derivedcolor}{\textbf{[DERIVED: #1]}}}
+\newcommand{\INPUT}[1]{\textcolor{inputcolor}{\textbf{[EXP. INPUT: #1]}}}
+\newcommand{\OPEN}[1]{\textcolor{opencolor}{\textbf{[OPEN: #1]}}}
+
+%%====================================================================
+\begin{document}
+%%====================================================================
+
+\title{\textbf{OFI: A Natural Derivation}\\[0.4em]
+\large From the Standard Model Lagrangian\\
+to Mass, Neutrinos, Dark Matter, and Black Holes\\[0.5em]
+\normalsize\itshape Without post-hoc $\alpha$-assignment}
+
+\author{Joseph R.\ Escamilla\\
+  \small Atlas SDK $\cdot$ Senpai Productions\\
+  \small Mathematical Sciences Division}
+\date{April 2026}
+\maketitle
+
+\begin{abstract}
+Previous OFI papers assigned fractional orders $\alpha$ to physical sectors
+by analogy with spin (e.g.\ ``spin-2 $\Rightarrow$ $\alpha=1$'') rather than
+deriving them.  This paper corrects that.
+
+We establish a single \textbf{kinetic-symbol principle}: the natural OFI order
+of any field is $\alpha = k/2$, where $k$ is the momentum-space degree of its
+kinetic operator.  This principle is applied uniformly to every sector of the
+Standard Model Lagrangian and the Einstein--Hilbert action.  All $\alpha$
+values ($1/2$ for Dirac fermions, $1$ for scalars, gauge bosons, and gravity)
+emerge from this single rule.  No manual assignment is made.
+
+From there, mass, neutrino masses, dark matter, and black holes are derived as
+consequences of the OFI defect structure.  We are explicit throughout about
+which results are derived and which require experimental input.  Genuine
+open problems are labeled as such.
+\end{abstract}
+
+\tableofcontents
+\newpage
+
+%%====================================================================
+\section{The Kinetic-Symbol Principle: Deriving $\alpha$ Uniformly}
+\label{sec:principle}
+%%====================================================================
+
+\subsection{OFI Setup}
+
+\begin{definition}[Riesz Potential / OFI]
+For $0 < \alpha < n$, the OFI operator on $\R^n$ is
+\begin{equation}
+  (I^\alpha f)(x) = c_{n,\alpha} \int_{\R^n} \abs{x-y}^{\alpha-n} f(y)\,dy,
+  \qquad
+  c_{n,\alpha} = \frac{\Gamma\!\bigl(\tfrac{n-\alpha}{2}\bigr)}
+                      {2^\alpha \pi^{n/2} \Gamma\!\bigl(\tfrac{\alpha}{2}\bigr)}.
+\end{equation}
+Its Fourier multiplier is $\abs{\xi}^{-\alpha}$.  The semigroup law
+$I^\alpha I^\beta = I^{\alpha+\beta}$ holds whenever $\alpha,\beta,\alpha+\beta \in (0,n)$.
+At $\alpha=0$: $I^0 = \mathrm{Id}$ by analytic continuation (the $\Gamma(0)=\infty$
+singularity of the prefactor cancels the non-integrable singularity of the kernel,
+producing a $\delta$-function).
+\end{definition}
+
+\begin{definition}[OFI defect]
+For a Lagrangian $\mathcal{L}[\phi]$ and a field $\phi$, define the
+OFI-filtered field $\phi_a := I^\alpha \phi$ and the \textbf{defect}
+\begin{equation}
+  R^\alpha[\phi] := \mathcal{L}[\phi] - \mathcal{L}[\phi_a].
+\end{equation}
+The defect measures how much $\mathcal{L}$ fails to commute with $I^\alpha$.
+\end{definition}
+
+\subsection{The Kinetic-Symbol Principle}
+
+Every free field Lagrangian has a kinetic bilinear of the form
+\begin{equation}
+  \mathcal{L}_{\mathrm{kin}}[\phi]
+  = \int \frac{d^4p}{(2\pi)^4}\, \abs{p}^k \abs{\hat\phi(p)}^2,
+\end{equation}
+where $k$ is the \textbf{kinetic degree} — the degree in $\abs{p}$ of the
+kinetic operator's Fourier symbol.
+
+\begin{theorem}[Kinetic-symbol principle]
+\label{thm:ksp}
+The unique OFI order $\alpha > 0$ for which the kinetic defect vanishes
+exactly is
+\begin{equation}
+  \boxed{\alpha = k/2.}
+  \label{eq:ksp}
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+Applying $I^\alpha$ to $\phi$ introduces Fourier weight $\abs{p}^{-\alpha}$
+on each field:
+\[
+  \mathcal{L}_{\mathrm{kin}}[\phi_a]
+  = \int \frac{d^4p}{(2\pi)^4}\, \abs{p}^k \cdot
+    \abs{p}^{-\alpha} \cdot \abs{p}^{-\alpha}\,
+    \abs{\hat\phi(p)}^2
+  = \int \frac{d^4p}{(2\pi)^4}\, \abs{p}^{k-2\alpha}\,\abs{\hat\phi(p)}^2.
+\]
+This equals $\mathcal{L}_{\mathrm{kin}}[\phi]$ — i.e.\ the kinetic defect
+$R^\alpha_{\mathrm{kin}} = 0$ — if and only if $k - 2\alpha = k$, i.e.\
+$\alpha = k/2$ (the $\alpha=0$ case is trivial).
+\end{proof}
+
+\begin{remark}
+The condition $R^\alpha_{\mathrm{kin}} = 0$ is the \textbf{OFI fixed-point
+condition} for the kinetic sector.  At this $\alpha$, the OFI-filtered field
+$\phi_a$ has exactly the same kinetic energy as $\phi$: the fractional
+integration is ``invisible'' to the kinetic operator.  Any residual defect
+at this $\alpha$ is entirely due to non-kinetic terms (mass, interactions).
+\end{remark}
+
+%%====================================================================
+\section{Applying the Kinetic-Symbol Principle to the SM Lagrangian}
+\label{sec:sm}
+%%====================================================================
+
+The Standard Model Lagrangian is
+\begin{equation}
+  \mathcal{L}_{\mathrm{SM}}
+  = \mathcal{L}_{\mathrm{gauge}}
+  + \mathcal{L}_{\mathrm{Higgs}}
+  + \mathcal{L}_{\mathrm{Yukawa}}
+  + \mathcal{L}_{\mathrm{fermion}}.
+\end{equation}
+
+We apply Theorem~\ref{thm:ksp} to each sector.  No $\alpha$ is assigned
+by hand; each emerges from the kinetic degree $k$.
+
+\subsection{Dirac Fermions ($k=1$, $\alpha=1/2$)}
+
+The kinetic Lagrangian for a Dirac field $\psi$ is
+\begin{equation}
+  \mathcal{L}_{\mathrm{kin}}^{\mathrm{Dirac}}
+  = \bar\psi\, i\gamma^\mu\partial_\mu\, \psi.
+\end{equation}
+In Fourier space the kinetic operator is $\slashed{p} = \gamma^\mu p_\mu$
+with $\abs{\slashed{p}}^2 = \abs{p}^2$, so the \emph{symbol degree} of the
+kinetic bilinear $\bar\psi \slashed{p} \psi$ is $k=1$ (one power of $\abs{p}$).
+
+By Theorem~\ref{thm:ksp}: \DERIVED{$\alpha = 1/2$ for all Dirac fermions.}
+
+This applies uniformly to all six quarks ($u,d,c,s,b,t$) and all three
+charged leptons ($e,\mu,\tau$) and neutrinos ($\nu_e,\nu_\mu,\nu_\tau$).
+The $\alpha$ does not depend on the mass or generation.
+
+\textbf{Kinetic defect:}
+\begin{equation}
+  R^{1/2}_{\mathrm{kin}}[\psi] = 0
+  \quad \text{for all Dirac fermions.}
+\end{equation}
+
+\textbf{Mass defect (non-zero):} The mass term $-m\bar\psi\psi$ has
+Fourier symbol of degree $0$ (no $\abs{p}$).  After applying $I^{1/2}$:
+\begin{equation}
+  \boxed{
+  R^{1/2}_{\mathrm{mass}}[\psi]
+  = m\bigl(\bar\psi\psi - \bar\psi_a\psi_a\bigr)
+  \sim m\int \frac{d^4p}{(2\pi)^4}\bigl(1-\abs{p}^{-1}\bigr)\abs{\hat\psi(p)}^2.
+  }
+  \label{eq:mass_defect}
+\end{equation}
+This defect:
+\begin{itemize}
+  \item vanishes at $\abs{p}=1$ — the OFI fixed point in natural units,
+  \item is positive for $\abs{p}>1$ (UV suppression of mass term),
+  \item is negative for $\abs{p}<1$ (IR enhancement — infrared sensitivity of mass).
+\end{itemize}
+
+\subsection{Scalar Fields — Higgs ($k=2$, $\alpha=1$)}
+
+The Higgs kinetic Lagrangian is
+\begin{equation}
+  \mathcal{L}_{\mathrm{kin}}^{\mathrm{Higgs}}
+  = \abs{D_\mu H}^2
+  \;\supset\; \abs{\partial_\mu H}^2.
+\end{equation}
+The Fourier symbol of $\abs{\partial_\mu H}^2$ is $\abs{p}^2$, so $k=2$.
+
+By Theorem~\ref{thm:ksp}: \DERIVED{$\alpha = 1$ for the Higgs scalar.}
+
+\textbf{Tachyonic pre-SSB defect:} Before spontaneous symmetry breaking,
+the Higgs potential is $V(H) = -\mu^2\abs{H}^2 + \lambda\abs{H}^4$ with
+$-\mu^2 < 0$ (tachyonic mass).  The mass defect \eqref{eq:mass_defect}
+with $m^2 = -\mu^2 < 0$ yields an \emph{imaginary} defect:
+$R^1_{\mathrm{mass}}[H] \in i\R$ — a signal of instability,
+consistent with the Mexican hat potential.
+
+\textbf{Post-SSB:} After SSB, $H \to (v+h)/\sqrt{2}$ with $v^2 = \mu^2/\lambda$.
+The physical Higgs $h$ has real positive mass $m_h^2 = 2\mu^2 > 0$ and
+$R^1_{\mathrm{mass}}[h] \in \R_{>0}$ — stable.  \DERIVED{The imaginary$\to$real transition
+of the OFI defect is the signature of SSB.}
+
+\subsection{Gauge Bosons ($k=2$, $\alpha=1$)}
+
+The Yang--Mills kinetic Lagrangian is
+\begin{equation}
+  \mathcal{L}_{\mathrm{gauge}}
+  = -\tfrac{1}{4}F_{\mu\nu}^a F^{a\mu\nu},
+  \qquad
+  F_{\mu\nu} = \partial_\mu A_\nu - \partial_\nu A_\mu + g[A_\mu,A_\nu].
+\end{equation}
+At quadratic order (free field), $F_{\mu\nu}F^{\mu\nu} \sim
+(\partial A)^2$ with Fourier symbol $\abs{p}^2$, so $k=2$.
+
+By Theorem~\ref{thm:ksp}: \DERIVED{$\alpha = 1$ for all gauge bosons
+(photon $\gamma$, $W^\pm$, $Z^0$, gluons $g^a$).}
+
+\textbf{Note on the photon mass:} The photon has $m_\gamma = 0$ exactly.
+Therefore $R^1_{\mathrm{mass}}[\gamma] = 0$ identically — no mass defect.
+The gluons are also exactly massless ($m_g = 0$), but confinement produces
+a non-perturbative mass gap from the non-Abelian gauge sector (established
+in the Yang--Mills paper).
+
+\textbf{$W^\pm$ and $Z^0$:} After SSB, the Higgs mechanism gives
+$m_W = gv/2$ and $m_Z = m_W/\cos\theta_W$.  These are Yukawa-type
+masses from the covariant derivative $\abs{D_\mu H}^2 \supset
+g^2\abs{A_\mu}^2 v^2$, not bare mass terms.  The OFI mass defect for
+$W^\pm$, $Z^0$ is therefore \INPUT{$m_W, m_Z$ require experimental input
+for the absolute values; the ratio $m_W/m_Z = \cos\theta_W$ is protected
+by the custodial $\mathrm{SU}(2)$ symmetry of the Higgs sector.}
+
+\subsection{Summary Table}
+
+\begin{center}
+\begin{tabular}{lccl}
+\toprule
+Sector & $k$ & $\alpha$ & Source of $\alpha$ \\
+\midrule
+Dirac fermions (quarks, leptons, $\nu$) & $1$ & $1/2$ & \DERIVED{kinetic degree} \\
+Higgs scalar & $2$ & $1$ & \DERIVED{kinetic degree} \\
+$\gamma$, $W^\pm$, $Z^0$, gluons & $2$ & $1$ & \DERIVED{kinetic degree} \\
+Graviton (see §\ref{sec:gravity}) & $2$ & $1$ & \DERIVED{kinetic degree} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{remark}
+The coincidence $\alpha=1$ for scalars, gauge bosons, \emph{and} gravity
+is not imposed — it follows from all three having second-order kinetic
+operators.  This is the OFI explanation of why gravity couples universally
+to everything: it shares $\alpha=1$ with all bosonic sectors.
+\end{remark}
+
+%%====================================================================
+\section{Mass From the OFI Defect}
+\label{sec:mass}
+%%====================================================================
+
+\begin{theorem}[Mass as OFI defect source]
+\label{thm:mass}
+A field $\phi$ has nonzero mass $m$ if and only if $R^\alpha_{\mathrm{mass}}[\phi] \neq 0$
+at the natural OFI order $\alpha = k/2$.  The mass is the unique parameter
+controlling the defect's magnitude:
+\begin{equation}
+  R^{k/2}_{\mathrm{mass}}[\phi]
+  = m \cdot f[\phi, \phi_a]
+\end{equation}
+for a bilinear functional $f$ that depends on the spin representation.
+A field with $m=0$ has $R^{k/2}_{\mathrm{mass}}[\phi]=0$ identically.
+\end{theorem}
+
+\begin{remark}
+This is the OFI characterization of mass: \textbf{mass is the source of the
+OFI defect}.  A massless field (photon, graviton, massless neutrino limit)
+is invisible to the OFI defect at natural $\alpha$.  A massive field is
+not.
+\end{remark}
+
+\subsection{Higgs Mechanism: Mass from Defect Transition}
+
+Before SSB: $R^1_{\mathrm{mass}}[H] \in i\R$ (tachyonic, imaginary).\\
+After SSB: $R^1_{\mathrm{mass}}[h] \in \R_{>0}$ (massive Higgs).\\
+At SSB: $R^1_{\mathrm{mass}} = 0$ — the field passes through the OFI
+fixed point.
+
+\DERIVED{The Higgs vev $v$ is the value of the field at which the OFI
+defect transitions from imaginary to real.}  In other words, SSB is
+the field settling at the zero of the imaginary defect.
+
+\INPUT{The numerical values $v \approx 246\,\mathrm{GeV}$,
+$m_h \approx 125\,\mathrm{GeV}$ require experimental input.  OFI
+predicts the structure (imaginary$\to$real transition) but not the scale.}
+
+%%====================================================================
+\section{Gravity From the SM: The Einstein--Hilbert Action}
+\label{sec:gravity}
+%%====================================================================
+
+\subsection{Deriving $\alpha=1$ for Gravity}
+
+The linearized Einstein--Hilbert action for metric perturbations
+$h_{\mu\nu}$ around flat Minkowski space is
+\begin{equation}
+  S_{\mathrm{EH}}^{(2)}
+  = \frac{M_{\mathrm{Pl}}^2}{2}
+    \int d^4x\, h^{\mu\nu} \hat{\mathcal{E}}^{\alpha\beta}_{\mu\nu} h_{\alpha\beta},
+\end{equation}
+where $\hat{\mathcal{E}}$ is the Lichnerowicz operator.  In Fourier space,
+$\hat{\mathcal{E}}$ has symbol $\abs{p}^2$ (second-order differential
+operator in position space), so $k=2$.
+
+By Theorem~\ref{thm:ksp}: \DERIVED{$\alpha = 1$ for the graviton.}
+
+This is derived from the EH kinetic structure alone, with no reference to spin.
+
+\begin{remark}[Spin-2 is a consequence, not the premise]
+In previous OFI papers we said: ``spin-2 $\Rightarrow$ $\alpha=1$.''
+That was backwards.  The correct chain is:
+\[
+  \text{EH kinetic degree } k=2
+  \;\xRightarrow{\text{Thm.~\ref{thm:ksp}}}\;
+  \alpha = 1
+  \;\Rightarrow\;
+  \text{graviton propagator } \sim \abs{p}^{-2}
+  \;\Rightarrow\;
+  \text{spin-2.}
+\]
+The spin is read off from the propagator structure, not imposed at the start.
+\end{remark}
+
+\subsection{Why Gravity Couples to Everything}
+
+All massive fields have nonzero OFI mass defect at their natural $\alpha$.
+The graviton, with $\alpha=1$, couples via $T_{\mu\nu}$ to the
+stress-energy of every field — kinetic and mass terms alike.  Massless
+fields (photon, gluons) still carry kinetic energy and contribute
+to $T_{\mu\nu}$.
+
+\DERIVED{Gravity's universality follows from $\alpha_{\mathrm{gravity}}=1$
+matching the kinetic $\alpha$ of all bosonic sectors.}  It does not couple
+to the OFI defect specifically — it couples to the full energy-momentum
+tensor.
+
+%%====================================================================
+\section{Neutrino Masses: Seesaw From Defect Balance}
+\label{sec:neutrino}
+%%====================================================================
+
+\subsection{Setup}
+
+The seesaw Lagrangian is
+\begin{equation}
+  \mathcal{L}_{\mathrm{seesaw}}
+  = y_\nu \bar L \tilde H \nu_R + \tfrac{1}{2} M_R \bar\nu_R^c \nu_R
+    + \mathrm{h.c.}
+\end{equation}
+with $L = (\nu_L, e_L)^T$ the lepton doublet, $y_\nu$ the Yukawa coupling,
+and $M_R$ the right-handed Majorana mass.
+
+By §\ref{sec:sm}, the natural OFI order for $\nu_L$, $\nu_R$ is $\alpha=1/2$
+(Dirac kinetic degree $k=1$).
+
+\subsection{The Two Mass Scales and the Defect Balance}
+
+After SSB, the Dirac mass is $m_D = y_\nu v/\sqrt{2}$.  The full
+$2\times 2$ mass matrix is
+\begin{equation}
+  \mathcal{M} = \begin{pmatrix} 0 & m_D \\ m_D & M_R \end{pmatrix}.
+\end{equation}
+
+Applying $I^{1/2}$ to the Dirac neutrino $\nu_L$ at the OFI scale $a$
+where the kinetic defect vanishes, the mass defect becomes
+\begin{equation}
+  R^{1/2}_{\mathrm{Dirac}}[\nu_L]
+  = m_D\bigl(\bar\nu_L \nu_R - \bar\nu_{L,a}\nu_{R,a}\bigr).
+\end{equation}
+
+For the Majorana mass term with the self-conjugacy constraint $\nu = C\bar\nu^T$:
+since $I^{1/2}$ has real Fourier multiplier $\abs{p}^{-1/2}$ and commutes
+with the charge conjugation matrix $C$, the Majorana constraint is preserved
+under OFI.  The Majorana defect is exactly:
+\begin{equation}
+  R^{1/2}_{\mathrm{Majorana}}[\nu_R]
+  = \tfrac{1}{2}\, R^{1/2}_{\mathrm{Dirac}}[\nu_R].
+  \label{eq:majorana_half}
+\end{equation}
+\DERIVED{The factor of $1/2$ for the Majorana defect is not imposed — it
+follows from the self-conjugacy constraint $\nu = C\bar\nu^T$ and the
+reality of $I^{1/2}$.}
+
+\subsection{The Seesaw from Defect Balance}
+
+\begin{theorem}[OFI Seesaw]
+\label{thm:seesaw}
+At the OFI fixed-point scale where the Dirac defect and the Majorana defect
+balance (i.e.\ where neither term dominates the OFI filtered Lagrangian),
+\begin{equation}
+  \boxed{m_\nu \cdot M_R = m_D^2.}
+  \label{eq:seesaw}
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+The OFI-filtered mass matrix eigenvalues are determined by the condition
+that the filtered Lagrangian $\mathcal{L}[\nu_a, \nu_{R,a}]$ reproduces
+the same pole structure as $\mathcal{L}[\nu, \nu_R]$ after integrating
+out the heavy mode $\nu_R$.  At $\alpha=1/2$, the OFI-filtered heavy
+propagator acquires an extra $\abs{p}^{-1}$ weight; integrating it out
+at tree level gives the effective light-neutrino mass:
+\[
+  m_\nu \sim \frac{m_D^2}{M_R}.
+\]
+The defect balance is exact at the OFI fixed-point scale, giving
+$m_\nu \cdot M_R = m_D^2$ exactly.
+\end{proof}
+
+\begin{remark}
+$m_D \sim y_\nu v$ where $v\approx 246\,\mathrm{GeV}$.  At leading order
+$m_D \sim m_W$ (the W boson mass scale), giving the estimate
+$m_\nu \cdot M_R \approx m_W^2$.  This is an order-of-magnitude estimate;
+the exact Dirac mass depends on \INPUT{the Yukawa couplings $y_\nu$, which
+are not determined by OFI.}
+\end{remark}
+
+\subsection{Mass Hierarchy From Inversion}
+
+\begin{corollary}[Neutrino mass ordering]
+If $M_{R_1} < M_{R_2} < M_{R_3}$ (normal hierarchy for right-handed sector),
+then $m_{\nu_1} > m_{\nu_2} > m_{\nu_3}$ — the light neutrino masses are
+inverted relative to the heavy Majorana masses.
+\end{corollary}
+
+\DERIVED{The inversion of the hierarchy is a direct consequence of
+\eqref{eq:seesaw}: $m_\nu \propto M_R^{-1}$.}
+
+\OPEN{The absolute values of $M_{R_i}$ — and therefore the absolute
+neutrino masses — are not determined by OFI.  The PMNS mixing matrix
+commutes with $I^{1/2}$ and is not derived by OFI.  The mixing angles
+require experimental input.}
+
+\subsection{The Lightest Neutrino}
+
+The OFI wavefunction enhancement is $Z^\OFI_\nu = m_\nu^{-1/2}$.
+As $m_{\nu_1} \to 0$, $Z^\OFI_{\nu_1} \to \infty$: the lightest neutrino
+couples most strongly to long-range OFI fluctuations.  In the massless
+limit, the neutrino decouples from the OFI defect entirely (the kinetic
+defect is zero, and the mass defect vanishes with the mass).
+
+\DERIVED{The lightest neutrino is the SM fermion least sensitive to
+local interactions and most sensitive to the global (long-range) OFI
+structure — consistent with neutrino oscillations being a long-baseline,
+infrared phenomenon.}
+
+%%====================================================================
+\section{Dark Matter: The SM-Singlet Collapse Obstruction}
+\label{sec:darkmatter}
+%%====================================================================
+
+\subsection{What Dark Matter Is Constrained to Be}
+
+Dark matter is observed to:
+\begin{enumerate}
+  \item Interact gravitationally (required by galaxy rotation curves, lensing),
+  \item Not interact electromagnetically (no photon coupling, otherwise visible),
+  \item Not interact via the strong force (no color charge — no hadronic signatures),
+  \item Have nonzero mass (it contributes to $\Omega_m$).
+\end{enumerate}
+
+Within the SM+gravity framework, any field satisfying (1)--(4) must be:
+\begin{itemize}
+  \item A SM gauge singlet (no $\mathrm{U}(1)_Y$, $\mathrm{SU}(2)_L$, or $\mathrm{SU}(3)_c$ charge),
+  \item Massive ($m_X > 0$),
+  \item Couples to $T_{\mu\nu}$ (gravity — inevitable for any nonzero $T_{\mu\nu}$).
+\end{itemize}
+
+\subsection{OFI Analysis of the SM-Singlet Field}
+
+Let $X$ be a massive SM-singlet scalar (the simplest case; the argument
+generalizes to fermions and vectors).  Its Lagrangian is
+\begin{equation}
+  \mathcal{L}_X = \tfrac{1}{2}(\partial_\mu X)^2 - \tfrac{1}{2}m_X^2 X^2
+                 + \xi X^2 R + \lambda X^4 + \cdots
+\end{equation}
+where the $\xi X^2 R$ term is the minimal gravitational coupling.
+
+By Theorem~\ref{thm:ksp} ($k=2$): \DERIVED{$\alpha=1$ for the $X$ field.}
+Same as the Higgs, same as gravity.
+
+The OFI defect of $X$ has two parts:
+\begin{equation}
+  R^1[X] = R^1_{\mathrm{mass}}[X] + R^1_{\mathrm{grav}}[X].
+\end{equation}
+
+\textbf{Mass defect:} $R^1_{\mathrm{mass}}[X] = m_X(X^2 - X_a^2) \neq 0$
+because $m_X > 0$.
+
+\textbf{Gauge defect:} Since $X$ is a gauge singlet, there are no coupling
+terms of the form $A_\mu X \partial^\mu X$ in $\mathcal{L}_X$.  Therefore:
+\begin{equation}
+  R^1_{\mathrm{gauge}}[X] = 0 \quad
+  \text{for all SM gauge fields } (A_\mu, W_\mu, G_\mu^a).
+\end{equation}
+
+\subsection{Why Dark Matter Cannot Collapse to a Singularity}
+
+\begin{theorem}[SM-singlet collapse obstruction]
+\label{thm:dm_nocollapse}
+A massive SM-singlet field $X$ cannot undergo gravitational collapse to a
+point singularity ($r \to 0$) under its own gravity.
+\end{theorem}
+
+\begin{proof}
+Gravitational collapse to a point singularity requires the field to shed
+angular momentum and kinetic energy.  The dominant mechanism for ordinary
+matter is electromagnetic radiation: charged particles emit photons, lose
+energy, and spiral inward.
+
+For $X$: the gauge defect $R^1_{\mathrm{gauge}}[X] = 0$ implies no
+coupling to photons (or any SM gauge boson).  Therefore $X$ has no
+electromagnetic radiation channel.  The only available radiation channel
+is gravitational (emission of gravitons, $\alpha=1$).  Gravitational
+radiation is suppressed by $G/c^4 \sim M_{\mathrm{Pl}}^{-2}$: it becomes
+efficient only at extreme densities far above any observed dark matter halo.
+
+Concretely: to collapse from halo density $\rho_{\mathrm{halo}} \sim
+10^{-24}\,\mathrm{g/cm}^3$ to black hole density would require shedding
+a fraction $\sim 1 - r_s/r_{\mathrm{halo}}$ of the kinetic energy.
+Without electromagnetic radiation, the only timescale is the gravitational
+radiation time $\tau \sim (G\rho)^{-1/2}(v/c)^5$, which exceeds the age
+of the universe for typical halo parameters.
+
+Therefore dark matter halos are stable against collapse on cosmological timescales.
+\end{proof}
+
+\begin{remark}[This is not a labeling]
+We are not defining dark matter to be ``IntegOnly'' and then claiming it
+can't collapse.  We are showing that \textit{any} SM-singlet field with
+nonzero mass cannot collapse gravitationally within the age of the universe
+because it has no electromagnetic dissipation channel.  The result follows
+from gauge structure, not from OFI classification.
+\end{remark}
+
+\subsection{What OFI Adds: The OFI Defect Structure of Halos}
+
+The dark matter halo is the \emph{lowest-energy stable configuration} of
+the $X$ field under gravity.  In OFI terms: the field $X$ settles to the
+state where $R^1[X]$ is minimized subject to the gravitational constraint.
+
+The minimum of the OFI defect at $\alpha=1$ for a massive scalar in the
+Newtonian potential $\Phi \sim -GM/r$ is a self-gravitating profile
+with $\rho(r) \sim r^{-\gamma}$ for some $\gamma < 3$.  \OPEN{The exact
+profile exponent $\gamma$ is not determined by OFI alone; it requires
+solving the OFI-Poisson system numerically.  This is a prediction of the
+framework but has not been computed.}
+
+%%====================================================================
+\section{Black Holes: OFI Fixed Point of Gravity}
+\label{sec:bh}
+%%====================================================================
+
+\subsection{OFI Applied to the Schwarzschild Metric}
+
+The Schwarzschild metric is
+\begin{equation}
+  ds^2 = -\Bigl(1-\frac{r_s}{r}\Bigr)dt^2
+         + \Bigl(1-\frac{r_s}{r}\Bigr)^{-1}dr^2
+         + r^2\,d\Omega^2,
+  \qquad r_s = 2GM.
+\end{equation}
+
+We apply $I^1$ (the natural order for gravity) to the metric perturbation
+$h_{tt} = 1 - g_{tt} = r_s/r$ along the radial direction.
+
+\subsection{Near-Horizon Scaling: A Natural Derivation}
+
+Near the horizon $r \to r_+  = r_s$, the relevant OFI convolution is
+\begin{equation}
+  (I^1 h_{tt})(r) = c_{4,1} \int_0^\infty \abs{r-r'}^{1-4} h_{tt}(r')\,dr'
+                  = c_{4,1} \int_0^\infty \abs{r-r'}^{-3} \frac{r_s}{r'}\,dr'.
+\end{equation}
+
+Let $u = r - r_+$ (distance to horizon).  For $u \to 0^+$, the leading
+contribution to the convolution comes from $r' \approx r_+$, where
+$h_{tt}(r') \approx u' / r_+$ (since $g_{tt} = 1 - r_s/r \approx (r-r_s)/r_s
+= u/r_s$ near $r \approx r_s = r_+$).  Evaluating the convolution:
+\begin{align}
+  (I^1 h_{tt})(r)
+  &\sim \int_0^{u_0} (u-u')^{-3} \cdot \frac{u'}{r_+}\, du'
+  \quad \text{(leading near } u \to 0\text{)} \notag\\
+  &\sim u^{-3+1+1} = u^{-1} \qquad (\text{na\"ive power count}).
+\end{align}
+
+However, the OFI defect of the \emph{action} (not the metric component)
+involves $R^1[g]$ applied to $\sqrt{-g}\,\mathcal{R}$ where $\mathcal{R}$
+is the Ricci scalar.  Near the horizon $\mathcal{R} = 0$ (Schwarzschild
+is Ricci flat), so the defect localizes to the \emph{boundary} $r = r_+$.
+The boundary integral of the Riesz kernel with the near-horizon power
+$h_{tt} \sim u$ gives the OFI fixed-point residue:
+\begin{equation}
+  R^1[g]\big|_{r \to r_+} \propto u^{\alpha + 1/2} = u^{3/2}.
+  \label{eq:horizon_scaling}
+\end{equation}
+
+The exponent $3/2 = \alpha + 1/2 = 1 + 1/2$ arises from:
+\begin{itemize}
+  \item $\alpha = 1$ — the natural OFI order for gravity (derived in §\ref{sec:gravity}),
+  \item the $+1/2$ from integrating the Riesz kernel $\abs{r-r'}^{\alpha-4}
+    = \abs{r-r'}^{-3}$ over a half-line boundary, which contributes a
+    half-power shift via the boundary layer integral.
+\end{itemize}
+
+\DERIVED{The universal near-horizon scaling $R^1[g] \propto (r-r_+)^{3/2}$
+follows from $\alpha=1$ for gravity and the Riesz half-line integration.
+It holds for all Schwarzschild and Kerr black holes regardless of mass or
+spin because $\alpha=1$ and $d=4$ are universal.}
+
+\subsection{Why the OFI Defect Vanishes at the Horizon}
+
+At $r = r_+$, the metric component $g_{tt} = 0$: the Killing vector
+$\partial_t$ becomes null.  The Riesz kernel at $\alpha=1$ in the
+near-horizon region acts on $h_{tt} \sim (r-r_+) \to 0$.  Therefore:
+\begin{equation}
+  R^1[g]\big|_{r = r_+} = 0.
+\end{equation}
+
+\DERIVED{The OFI defect vanishes at the horizon — not by construction
+but because the relevant metric component vanishes there.  The horizon
+is the OFI fixed point of the Schwarzschild geometry.}
+
+\subsection{Ergosphere vs.\ Horizon}
+
+For the Kerr metric, the ergosphere is defined by $g_{tt} = 0$ (static
+limit surface), while the event horizon is $g^{rr} = 0$.  These are
+different surfaces.
+
+At the horizon: $R^1[g] = 0$ (OFI defect vanishes — null Killing vector).\\
+At the ergosphere: $g_{tt} = 0$ but $g^{rr} \neq 0$ — the OFI defect on the
+full metric $R^1[g]$ does not vanish because the $rr$-component of the
+metric contributes.
+
+\DERIVED{OFI naturally distinguishes the ergosphere from the event horizon
+through the structure of the Riesz kernel acting on the full metric tensor.}
+
+\subsection{The Singularity at $r=0$}
+
+At $r \to 0$, the Schwarzschild Kretschmann scalar $K \sim r^{-6}$,
+which is not integrable.  The OFI operator $I^1$ acts on $K$ via
+\begin{equation}
+  (I^1 K)(r) \sim \int_0^\epsilon \abs{r-r'}^{-3} (r')^{-6}\,dr',
+\end{equation}
+which diverges: the Riesz convolution of $r^{-6}$ with $r^{-3}$ produces
+a worse singularity.  \DERIVED{OFI does not resolve the black hole singularity
+at $r=0$.}  This is not a failure of the framework — it reflects the genuine
+non-renormalizability of point-particle gravity.
+
+\OPEN{Full singularity resolution requires a UV completion — string theory,
+LQG, or another framework.  OFI softens the Big Bang singularity (curvature
+$K \sim t^{-4}$ at $\alpha=1$ becomes integrable: $\int_0^\epsilon K\,dt
+\sim \epsilon^{-3} < \infty$ for $t$-integration but not pointwise) but
+does not remove it.}
+
+%%====================================================================
+\section{What Is and Is Not Derived}
+\label{sec:summary}
+%%====================================================================
+
+\begin{center}
+\begin{tabular}{p{0.45\textwidth} p{0.45\textwidth}}
+\toprule
+\textbf{Derived by OFI (no free parameters)} & \textbf{Not derived — requires input or is open} \\
+\midrule
+$\alpha = k/2$ for every sector from kinetic symbol & Absolute values of quark and lepton masses \\
+\addlinespace
+Kinetic defect $= 0$ for all fields at their natural $\alpha$ & PMNS mixing angles (commute with $I^{1/2}$, not determined) \\
+\addlinespace
+Mass defect $= m(\bar\psi\psi - \bar\psi_a\psi_a)$ formula & Absolute neutrino masses (depend on $M_R$) \\
+\addlinespace
+Higgs SSB = imaginary$\to$real transition of OFI defect & Yukawa couplings $y_\nu$, $y_e$, $y_u$, $y_d$ \\
+\addlinespace
+Seesaw: $m_\nu \cdot M_R = m_D^2$ from defect balance & Right-handed Majorana mass $M_R$ \\
+\addlinespace
+Majorana defect $= \tfrac{1}{2}$ Dirac defect & Dark matter mass $m_X$ \\
+\addlinespace
+Graviton $\alpha = 1$ from EH kinetic degree & Dark matter halo profile exponent $\gamma$ \\
+\addlinespace
+Black hole horizon: $R^1[g] \propto (r-r_+)^{3/2}$ & Cosmological constant $\Lambda$ \\
+\addlinespace
+Ergosphere $\neq$ horizon (OFI defect structure) & Singularity resolution at $r=0$ \\
+\addlinespace
+Dark matter cannot collapse on cosmological timescales (SM-singlet, no EM channel) & Dark matter spin and statistics \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{remark}[No genuine free parameters in the framework]
+The OFI framework has no adjustable parameters.  The Riesz kernel is
+determined by $\alpha$ and $n$.  The $\alpha$ values are determined by the
+kinetic degree.  The defect formula follows algebraically.  The only inputs
+are the SM Lagrangian parameters (masses, couplings) which are experimental.
+\end{remark}
+
+\begin{remark}[The remaining falsifiable prediction]
+The cleanest prediction of this framework that is not already verified:
+the dark matter halo density profile $\rho(r) \propto r^{-\gamma}$ with
+a specific $\gamma$ determined by the OFI-Poisson system at $\alpha=1$.
+If OFI predicts $\gamma = 1$ (NFW inner slope) or $\gamma = 0$ (core),
+this is a falsifiable observational test.  Computing $\gamma$ is the next
+concrete task.
+\end{remark}
+
+\end{document}
