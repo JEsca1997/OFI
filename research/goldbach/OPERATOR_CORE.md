@@ -84,7 +84,7 @@ For a finitely supported sequence \(f\), write
 \[
 \widehat f(\alpha)=\sum_{n\ge1}f(n)e(\alpha n),
 \qquad e(x)=e^{2\pi i x},
-qquad \alpha\in\mathbb T=\mathbb R/\mathbb Z.
+\qquad \alpha\in\mathbb T=\mathbb R/\mathbb Z.
 \]
 
 Then Fourier inversion gives the exact coefficient identity
@@ -116,15 +116,20 @@ This is an exact operator-level bridge: the Goldbach problem is equivalent to po
 
 Let
 \[
-\mathcal H=\ell^2(W_+)\oplus\ell^2(W_-),
+\mathcal H=\ell^2(\{6k+1:k\ge1\})\oplus\ell^2(\{6k-1:k\ge1\}).
 \]
-where \(W_+=\{n:n\equiv1\pmod6\}\) and \(W_-=\{n:n\equiv-1\pmod6\}\). Define the branch involution \(J\) on coefficient labels by
+The isolated point \(1\) may be treated as a finite exceptional coordinate and has no bearing on Goldbach targets above \(6\). On the basis vectors \(e_{k,+},e_{k,-}\), define
 \[
-J(6k+1)=6k-1,
-\qquad
-J(6k-1)=6k+1
+J e_{k,+}=e_{k,-},\qquad J e_{k,-}=e_{k,+},
 \]
-where the index ranges are adjusted to stay in positive integers. Let \(\varepsilon\) be the sign involution on the two summands. Then the commuting involutions \(J\) and \(\varepsilon\) generate a representation of \(V_4\).
+and
+\[
+K e_{k,\pm}=(-1)^k e_{k,\pm}.
+\]
+Then \(J^2=K^2=I\) and \(JK=KJ\). Hence
+\[
+\{I,J,K,JK\}\cong V_4.
+\]
 
 The sector products \((+,-),(+,+),(-,-)\) are the three branch-pair channels. This gives a precise algebraic sorting action, but it does not generate primality: primality is carried by \(\theta_\pm\).
 
@@ -149,7 +154,7 @@ For example, the heat multiplier is \(m_t(n)=e^{-tn^2}\). Define the smoothed se
 Because every summand is nonnegative,
 \[
 \mathfrak G_{j,t}(E)>0
-quad\Longleftrightarrow\quad
+\quad\Longleftrightarrow\quad
 \mathfrak G_j(E)>0
 \]
 for every fixed \(t>0\), provided \(m_t(n)>0\) on the finite range \(1\le n<E\).
@@ -162,7 +167,7 @@ Thus positive diagonal smoothing preserves the **existence** of a Goldbach repre
 
 A complete proof above a threshold \(E_0\) would follow from the following explicitly falsifiable statement:
 
-> **Uniform sector lower bound.** There exist \(E_0\) and constants \(c>0\), \(\delta>0\) such that for every even \(E\ge E_0\), in its admissible sector \(j\),
+> **Uniform sector lower bound.** There exist \(E_0\) and constants \(c>0\), \(C>0\), \(\delta>0\) such that for every even \(E\ge E_0\), in its admissible sector \(j\),
 > \[
 > \mathfrak G_j(E)
 > \ge cE-CE^{1-\delta}>0.
